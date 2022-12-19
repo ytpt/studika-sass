@@ -1,0 +1,73 @@
+//Обнуление
+$zero: 0
+$no: none
+$same: inherit
+
+%maximum
+  width: 100%
+  height: 100%
+  font-size: 14px
+  -ms-text-size-adjust: 100%
+  -moz-text-size-adjust: 100%
+  -webkit-text-size-adjust: 100%
+%inherit
+  font-size: $same
+  font-weight: $same
+%decor
+  text-decoration: $no
+%block
+  display: block
+%family
+  font-family: inherit
+
+a
+  &:focus
+    outline: $no
+  &:active
+    outline: $no
+nav
+  @extend %block
+footer
+  @extend %block
+header
+  @extend %block
+aside
+  @extend %block
+html
+  @extend %maximum
+body
+  width: 100%
+  line-height: 1
+  font-size: 14px
+  -ms-text-size-adjust: 100%
+  -moz-text-size-adjust: 100%
+  -webkit-text-size-adjust: 100%
+input
+  @extend %family
+button
+ @extend %family
+textarea
+  @extend %family
+button
+  cursor: pointer
+a
+  @extend %decor
+  &:visited
+    @extend %decor
+  &:hover
+    @extend %decor
+ul
+  li
+    list-style: $no
+h1
+  @extend %inherit
+h2
+  @extend %inherit
+h3
+  @extend %inherit
+h4
+  @extend %inherit
+h5
+  @extend %inherit
+h6
+  @extend %inherit

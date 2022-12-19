@@ -1,0 +1,129 @@
+@import url(//db.onlinewebfonts.com/c/353efa59e46e6dcb29eeada2f25f490a?family=Formular+Medium)
+@import "null.style"
+
+$sizes: ("sm":576px, "md":768px, "xl":1200px)
+
+@mixin hover($r)
+  background: #F1F1F1
+  border-radius: ($r)
+
+%between
+  display: flex
+  flex-direction: row
+  justify-content: space-between
+  align-items: center
+%black
+  color: #222222
+%cursor
+  cursor: pointer
+%height
+  max-height: 32px
+%top
+  position: absolute
+  top: 0
+
+html
+  font-family: 'Open Sans', sans-serif
+  line-height: 22px
+body
+  background: grey
+  margin: 15px 0
+header
+  width: 100%
+  background: #fff
+a
+  @extend %cursor
+.container
+  max-width: 90%
+  display: grid
+  grid-template-rows: 1fr 1fr
+  row-gap: 26.5px
+  margin: 0 auto
+  padding: 24px 0 18.5px 0
+.settings
+  @extend %between
+  .logo
+    @extend %between
+    .city
+      @extend %between
+      @extend %cursor
+      @extend %height
+      position: relative
+      margin-left: 16px
+      &:hover
+        @include hover(37px)
+      a
+        padding: 0 16px 0 40px
+      img
+        @extend %top
+        left: 0
+        margin-right: 8px
+  .account
+    @extend %between
+    .like-btn
+      @extend %between
+      @extend %cursor
+      @extend %height
+      margin-right: 10.5px
+      padding: 9px 4px
+      &:hover
+        @include hover(37px)
+      img
+        margin-right: 7.5px
+      p
+        @extend %black
+        margin: 0
+    .profile-btn
+      @extend %between
+      @extend %cursor
+      margin-left: 39.5px
+      a
+        padding: 0 7px 0 13px
+        &:hover
+          color: #767676
+.menu
+  @extend %between
+  position: relative
+  >a
+    padding: 2.5px 10px
+  .menu_active
+    @include hover(34px)
+  div
+    @extend %between
+    a
+      color: transparent
+      -webkit-background-clip: text
+      background-image: linear-gradient(to right, #000, #fff)
+    button
+      position: absolute
+      width: 20px
+      height: 20px
+      top: 15px
+      right: 5px
+      max-width: 25px
+      background: url("../images/arrow-right.svg") #fff no-repeat
+      border: none
+      &:hover
+        background: url("../images/arrow-right-hover.svg") #fff no-repeat
+.invisible
+  display: none
+.container-block
+  display: block
+  padding: 24px 8px
+.back
+  min-width: 108px
+  background: #F1F1F1
+  padding: 12px 0 12px 44px
+  button
+    @extend %between
+    background: transparent
+    border: none
+    p
+      @extend %black
+      font-family: "Formular", sans-serif
+      font-weight: 500
+      font-size: 12px
+      line-height: 16px
+      letter-spacing: 2px
+      text-transform: uppercase
+      margin-left: 13px
