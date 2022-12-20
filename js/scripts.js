@@ -3,13 +3,13 @@ let header = document.querySelector("header");
 let container = header.querySelector(".container");
 let settings = container.querySelector(".settings");
 const logo = container.querySelector(".logo");
-const city = container.querySelector(".city");
-const search = container.querySelector(".search");
+const city = settings.querySelector(".city");
+const search = settings.querySelector(".search");
 const searchInput = search.querySelector("input");
 const menu = container.querySelector(".menu");
-const likes = container.querySelector(".like-btn");
-const account = container.querySelector(".account");
-const profileBtn = container.querySelector(".profile-btn");
+const account = settings.querySelector(".account");
+const likes = account.querySelector(".like-btn");
+const profileBtn = account.querySelector(".profile-btn");
 
 let burger = document.createElement("div");
 burger.classList.add('burger-menu');
@@ -42,9 +42,8 @@ if ( screenWidth <= 600 ) {
 if ( screenWidth <= 768 && screenWidth >= 601 ) {
     settings.removeChild(search);
     settings.insertBefore(burger, settings.children[1]);
-    container.style.display = "block";
-    profileBtn.style.margin = "0";
-    menu.style.display = "none";
+    container.classList.add("visible");
+    menu.classList.add("invisible");
 }
 
 if ( screenWidth <= 1200 && screenWidth >= 769 ) {
