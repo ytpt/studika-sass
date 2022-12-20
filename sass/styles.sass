@@ -58,6 +58,29 @@ a
         @extend %top
         left: 0
         margin-right: 8px
+  .search
+    position: relative
+    input
+      min-width: 592px
+      background: #F1F1F1
+      font-size: 14px
+      color: #767676
+      text-align: left
+      border: none
+      border-radius: 100px
+      padding: 13px 8px 13px 48px
+      &:-moz-placeholder
+        text-align: center
+      &::-moz-placeholder
+        text-align: center
+      &:-ms-input-placeholder
+        text-align: center
+      &::-webkit-input-placeholder
+        text-align: center
+    .search-btn
+      position: absolute
+      top: 15px
+      left: 16px
   .account
     @extend %between
     .like-btn
