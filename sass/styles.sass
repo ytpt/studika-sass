@@ -1,8 +1,6 @@
 @import url(//db.onlinewebfonts.com/c/353efa59e46e6dcb29eeada2f25f490a?family=Formular+Medium)
 @import "null.style"
 
-$sizes: ("sm":576px, "md":768px, "xl":1200px)
-
 @mixin hover($r)
   background: #F1F1F1
   border-radius: ($r)
@@ -21,6 +19,8 @@ $sizes: ("sm":576px, "md":768px, "xl":1200px)
 %top
   position: absolute
   top: 0
+%relative
+  position: relative
 
 html
   font-family: 'Open Sans', sans-serif
@@ -48,7 +48,7 @@ a
       @extend %between
       @extend %cursor
       @extend %height
-      position: relative
+      @extend %relative
       margin-left: 16px
       &:hover
         @include hover(37px)
@@ -59,7 +59,7 @@ a
         left: 0
         margin-right: 8px
   .search
-    position: relative
+    @extend %relative
     input
       min-width: 592px
       background: #F1F1F1
@@ -106,7 +106,7 @@ a
           color: #767676
 .menu
   @extend %between
-  position: relative
+  @extend %relative
   >a
     padding: 2.5px 10px
   .menu_active
@@ -130,6 +130,8 @@ a
         background: url("../images/arrow-right-hover.svg") #fff no-repeat
 .invisible
   display: none
+.visible
+  display: block
 .container-block
   display: block
   padding: 24px 8px
