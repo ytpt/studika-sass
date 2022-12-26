@@ -1,7 +1,7 @@
 let header = document.querySelector("header");
 let container = header.querySelector(".container");
 let settings = container.querySelector(".settings");
-const logo = container.querySelector(".logo");
+let logo = container.querySelector(".logo");
 const city = settings.querySelector(".city");
 const search = settings.querySelector(".search");
 const searchInput = search.querySelector("input");
@@ -21,11 +21,11 @@ burger.innerHTML = `
 let back = document.createElement("div");
 back.classList.add("back");
 back.innerHTML = `
-        <button type="button">
-            <img src="../images/arrow-left.svg" alt='Влево'>
-            <p>Назад</p>
-        </button>
-    `;
+    <button type="button">
+        <img src="../images/arrow-left.svg" alt='Влево'>
+        <p>Назад</p>
+    </button>
+`;
 
 window.onload = () => {
     if (document.documentElement.clientWidth <= 600) {
@@ -70,6 +70,9 @@ window.onload = () => {
 
 //Выпадающий список городов
 let cityList = [];
+let cityBlock = document.createElement("div");
+cityBlock.classList.add("choose-city");
+
 city.addEventListener("click", function() {
     let isShown = true;
     if (cityList.length === 0) {
@@ -84,34 +87,30 @@ city.addEventListener("click", function() {
             return response.json();
         }
         //Отправка запроса
-        postData("https://studika.ru/api/areas", {})
-            .then((data) => {
-                data.map(obj => {
-                    let objList = obj.name;
-                    return objList.map(function(city) {
-                        let li = document.createElement('li');
-                    })
+        // postData("https://studika.ru/api/areas", {})
+        //     .then((data) => {
+        //         data.map(obj => {
+        //             cityList.push(obj.name);
+        //         })
 
-                    //Построение выпадающего списка
-                    let cityBlock = document.createElement("div");
-                    cityBlock.classList.add("choose-city");
-                    cityBlock.innerHTML = `
-                        <div class="find-city">
-                            <input type="text" placeholder="Любой регион">
-                            <a class="city-btn">
-                                <p>Москва</p>
-                                <img src="../images/cross.svg" alt="Удалить">
-                            </a>
-                        </div>
-                        <div class="city-list">
-                            <ul>${objList}</ul>
-                        </div>
-                        <button>Сохранить</button>
-                    `;
-                })
-            })
-            .catch(function(error) {
-                console.log(error.message);
-            })
+            //Построение выпадающего списка
+            // cityBlock.innerHTML = `
+            //     <div class="find-city">
+            //         <input type="text" placeholder="Любой регион">
+            //         <a class="city-btn">
+            //             <p>Москва</p>
+            //             <img src="../images/cross.svg" alt="Удалить">
+            //         </a>
+            //     </div>
+            //     <div class="city-list">
+            //         <ul>${cityList}</ul>
+            //     </div>
+            //     <button>Сохранить</button>
+            // `;
+            //     logo.append(cityBlock);
+            // })
+        // .catch(function(error) {
+        //     console.log(error.message);
+        // })
     }
 })

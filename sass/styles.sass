@@ -42,6 +42,7 @@ a
   padding: 24px 0 18.5px 0
 .settings
   @extend %between
+  position: relative
   .logo
     @extend %between
     .city
@@ -152,3 +153,57 @@ a
       letter-spacing: 2px
       text-transform: uppercase
       margin-left: 13px
+.choose-city
+  position: absolute
+  top: 50px
+  left: 100px
+  min-width: 384px
+  display: flex
+  flex-direction: column
+  background: #FBFBFB
+  box-shadow: 0 7px 38px rgba(44, 62, 106, 0.25)
+  border-radius: 10px
+  padding: 24px 16px 0 16px
+  z-index: 100
+  .search-city
+    margin: 24px 16px 16px 16px
+    input
+      width: 92%
+      font-size: 14px
+      padding: 14px 0 12px 25px
+      border: 2px solid #ABC8EA
+      border-radius: 100px
+      color: #A7A7A7
+    .chosen-city
+      display: flex
+      flex-direction: row
+      flex-wrap: wrap
+      max-width: 384px
+      column-gap: 8px
+      row-gap: 8px
+      margin-top: 16px
+      overflow: hidden
+      .city-elem
+        display: flex
+        flex-direction: row
+        justify-content: space-between
+        background: #0656b4
+        color: #fff
+        border-radius: 49px
+        padding: 9px 0 9px 16px
+        img
+          padding: 0 13px
+  .cities
+    height: 223px
+    overflow-y: scroll
+    margin-bottom: 25px
+    li
+      padding: 8px 0 10px 0
+      a
+        font-family: "Open Sans", sans-serif
+        font-size: 14px
+        color: #222222
+  .save-btn
+    button
+      background: transparent
+      border: none
