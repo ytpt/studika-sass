@@ -1,4 +1,3 @@
-const screenWidth = window.innerWidth;
 let header = document.querySelector("header");
 let container = header.querySelector(".container");
 let settings = container.querySelector(".settings");
@@ -19,40 +18,54 @@ burger.innerHTML = `
     </a>
 `;
 
-if ( screenWidth <= 600 ) {
-    container.classList.add("container-block");
-    search.classList.add("invisible");
-    menu.classList.add("invisible");
-    city.style.display = "none";
-    profileBtn.style.display = "none";
-
-    settings.insertBefore(burger, logo);
-
-    let back = document.createElement("div");
-    back.classList.add("back");
-    back.innerHTML = `
+let back = document.createElement("div");
+back.classList.add("back");
+back.innerHTML = `
         <button type="button">
             <img src="../images/arrow-left.svg" alt='Влево'>
             <p>Назад</p>
         </button>
     `;
-    header.appendChild(back);
-}
 
-if ( screenWidth <= 768 && screenWidth >= 601 ) {
-    settings.removeChild(search);
-    settings.insertBefore(burger, settings.children[1]);
-    container.classList.add("visible");
-    menu.classList.add("invisible");
-}
+window.onload = () => {
+    if (document.documentElement.clientWidth <= 600) {
+        container.classList.add("container-block");
+        search.classList.add("invisible");
+        menu.classList.add("invisible");
+        city.style.display = "none";
+        profileBtn.style.display = "none";
 
-if ( screenWidth <= 1200 && screenWidth >= 769 ) {
-    account.removeChild(likes);
-    profileBtn.removeChild(profileBtn.children[0]);
-    profileBtn.style.marginLeft = "16px";
-    search.style.width = "100%";
-    searchInput.style.minWidth = "90%";
-    menu.style.fontSize = "11px";
+        settings.insertBefore(burger, logo);
+        if (!header.contains(back)) {
+            header.appendChild(back);
+        }
+    }
+
+    if (document.documentElement.clientWidth <= 768
+        && document.documentElement.clientWidth >= 601) {
+
+        if (settings.contains(search)) {
+            settings.removeChild(search);
+        }
+
+        settings.insertBefore(burger, settings.children[1]);
+        container.classList.add("visible");
+        menu.classList.add("invisible");
+    }
+
+    if (document.documentElement.clientWidth <= 1200
+        && document.documentElement.clientWidth >= 769) {
+        if (account.contains(likes)) {
+            account.removeChild(likes);
+        }
+        if (profileBtn.contains(profileBtn.children[0])) {
+            profileBtn.removeChild(profileBtn.children[0]);
+        }
+        profileBtn.style.marginLeft = "16px";
+        search.style.width = "100%";
+        searchInput.style.minWidth = "90%";
+        menu.style.fontSize = "11px";
+    }
 }
 
 //Выпадающий список городов
