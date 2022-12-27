@@ -21,6 +21,10 @@
   top: 0
 %relative
   position: relative
+%saveBtnActive
+  color: #fff
+  background: #0656B4
+  border-radius: 0 0 10px 10px
 
 html
   font-family: 'Open Sans', sans-serif
@@ -163,17 +167,19 @@ a
   background: #FBFBFB
   box-shadow: 0 7px 38px rgba(44, 62, 106, 0.25)
   border-radius: 10px
-  padding: 24px 16px 0 16px
   z-index: 100
   .search-city
-    margin: 24px 16px 16px 16px
+    border-bottom: 1px solid #D8D8D8
+    padding: 24px 16px 15px 16px
     input
       width: 92%
       font-size: 14px
       padding: 14px 0 12px 25px
       border: 2px solid #ABC8EA
       border-radius: 100px
-      color: #A7A7A7
+      outline: none
+      &::placeholder
+        color: #A7A7A7
     .chosen-city
       display: flex
       flex-direction: row
@@ -189,21 +195,49 @@ a
         justify-content: space-between
         background: #0656b4
         color: #fff
-        border-radius: 49px
-        padding: 9px 0 9px 16px
-        img
-          padding: 0 13px
-  .cities
-    height: 223px
-    overflow-y: scroll
-    margin-bottom: 25px
-    li
-      padding: 8px 0 10px 0
-      a
-        font-family: "Open Sans", sans-serif
         font-size: 14px
-        color: #222222
+        border-radius: 49px
+        padding: 9px 13px 9px 16px
+        p
+          margin: 0
+          padding-right: 8px
+  .cities
+    display: flex
+    flex-direction: column
+    max-height: 223px
+    overflow-y: hidden
+    margin: 8px 0 25px 0
+    &::-webkit-scrollbar
+      width: 4px
+      height: 50px
+    &:hover
+      overflow-y: auto
+    a
+      font-family: "Open Sans", sans-serif
+      font-size: 14px
+      color: #222222
+      padding: 8px 0 10px 23px
+      &:first-child
+        background: #F1F1F1
+      &:active
+        background: #F1F1F1
+      &:hover
+        background: #F1F1F1
   .save-btn
     button
+      width: 100%
       background: transparent
+      text-align: center
+      font-size: 12px
+      line-height: 16px
+      letter-spacing: 2px
+      text-transform: uppercase
       border: none
+      border-top: 1px solid #D8D8D8
+      color: #A7A7A7
+      padding: 16px 0
+      &:active
+        opacity: 0.9
+        @extend %saveBtnActive
+      &:hover
+        @extend %saveBtnActive
