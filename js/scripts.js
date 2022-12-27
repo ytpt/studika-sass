@@ -69,13 +69,36 @@ window.onload = () => {
 }
 
 //Выпадающий список городов
-let cityList = [];
+let regions = [];
 let cityBlock = document.createElement("div");
 cityBlock.classList.add("choose-city");
 
+function buildRegionsList(regions) {
+    cityBlock.innerHTML = `
+        <div class="search-city">
+            <label>
+                <input type="text" placeholder="Любой регион" autofocus>
+            </label>
+            <div class="chosen-city">
+                <div class="city-elem">
+                    <p>Москва</p>
+                    <a>
+                        <img src="./images/cross.svg" alt="Удалить">
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="cities">
+            ${regions}
+        </div>
+        <div class="save-btn">
+            <button type="button">Сохранить</button>
+        </div>
+    `;
+}
+
 city.addEventListener("click", function() {
-    let isShown = true;
-    if (cityList.length === 0) {
+    if (regions.length === 0) {
         const postData = async (url = "", data = {}) => {
             const response = await fetch(url, {
                 method: "POST",
@@ -87,30 +110,32 @@ city.addEventListener("click", function() {
             return response.json();
         }
         //Отправка запроса
-        // postData("https://studika.ru/api/areas", {})
-        //     .then((data) => {
-        //         data.map(obj => {
-        //             cityList.push(obj.name);
-        //         })
+        postData("https://studika.ru/api/areas", {})
+            .then((data) => {
+                data.map(obj => {
+                    regions += `<a>${obj.name}</a>`;
+                })
 
-            //Построение выпадающего списка
-            // cityBlock.innerHTML = `
-            //     <div class="find-city">
-            //         <input type="text" placeholder="Любой регион">
-            //         <a class="city-btn">
-            //             <p>Москва</p>
-            //             <img src="../images/cross.svg" alt="Удалить">
-            //         </a>
-            //     </div>
-            //     <div class="city-list">
-            //         <ul>${cityList}</ul>
-            //     </div>
-            //     <button>Сохранить</button>
-            // `;
-            //     logo.append(cityBlock);
-            // })
-        // .catch(function(error) {
-        //     console.log(error.message);
-        // })
+            buildRegionsList(regions);
+            settings.insertBefore(cityBlock, search);
+
+            document.addEventListener("click", (e) => {
+                const withinBoundaries = e.composedPath().includes(cityBlock);
+                if (!withinBoundaries) {
+                    cityBlock.style.display = "none";
+                }
+            })
+            document.addEventListener("keydown", function (e) {
+                if (e.keyCode === 27) {
+                    cityBlock.style.display = "none";
+                }
+            })
+            })
+
+            .catch(function (error) {
+                console.log(error.message);
+            })
+    } else {
+        buildRegionsList(regions);
     }
 })
