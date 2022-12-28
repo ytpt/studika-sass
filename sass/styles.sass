@@ -46,7 +46,6 @@ a
   padding: 24px 0 18.5px 0
 .settings
   @extend %between
-  position: relative
   .logo
     @extend %between
     .city
@@ -57,7 +56,7 @@ a
       margin-left: 16px
       &:hover
         @include hover(37px)
-      a
+      .city-main
         padding: 0 16px 0 40px
       img
         @extend %top
@@ -160,9 +159,9 @@ a
 .choose-city
   position: absolute
   top: 50px
-  left: 100px
-  min-width: 384px
+  left: 0
   display: flex
+  min-width: 384px
   flex-direction: column
   background: #FBFBFB
   box-shadow: 0 7px 38px rgba(44, 62, 106, 0.25)
@@ -181,7 +180,6 @@ a
       &::placeholder
         color: #A7A7A7
     .chosen-city
-      display: flex
       flex-direction: row
       flex-wrap: wrap
       max-width: 384px
