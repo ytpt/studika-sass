@@ -3,6 +3,7 @@ let container = header.querySelector(".container");
 let settings = container.querySelector(".settings");
 let logo = container.querySelector(".logo");
 const city = settings.querySelector(".city");
+const cityIcon = settings.querySelector(".city-main");
 const search = settings.querySelector(".search");
 const searchInput = search.querySelector("input");
 const menu = container.querySelector(".menu");
@@ -22,7 +23,7 @@ let back = document.createElement("div");
 back.classList.add("back");
 back.innerHTML = `
     <button type="button">
-        <img src="../images/arrow-left.svg" alt='Влево'>
+        <img src="../images/arrow-left.svg" alt="Влево">
         <p>Назад</p>
     </button>
 `;
@@ -70,10 +71,11 @@ window.onload = () => {
 
 //Выпадающий список городов
 let regions = [];
-let cityBlock = document.createElement("div");
-cityBlock.classList.add("choose-city");
 
 function buildRegionsList(regions) {
+    let cityBlock = document.createElement("div");
+    cityBlock.classList.add("choose-city");
+
     cityBlock.innerHTML = `
         <div class="search-city">
             <label>
@@ -95,9 +97,11 @@ function buildRegionsList(regions) {
             <button type="button">Сохранить</button>
         </div>
     `;
+
+    return cityBlock;
 }
 
-city.addEventListener("click", function() {
+cityIcon.addEventListener("click", function() {
     if (regions.length === 0) {
         const postData = async (url = "", data = {}) => {
             const response = await fetch(url, {
@@ -116,26 +120,29 @@ city.addEventListener("click", function() {
                     regions += `<a>${obj.name}</a>`;
                 })
 
-            buildRegionsList(regions);
-            settings.insertBefore(cityBlock, search);
-
-            document.addEventListener("click", (e) => {
-                const withinBoundaries = e.composedPath().includes(cityBlock);
-                if (!withinBoundaries) {
-                    cityBlock.style.display = "none";
-                }
-            })
-            document.addEventListener("keydown", function (e) {
-                if (e.keyCode === 27) {
-                    cityBlock.style.display = "none";
-                }
-            })
+            const regionsListDOM = buildRegionsList(regions);
+            city.insertBefore(regionsListDOM, city.children[2]);
             })
 
             .catch(function (error) {
                 console.log(error.message);
             })
     } else {
-        buildRegionsList(regions);
+        document.querySelector(".choose-city").style.display = document.querySelector(".choose-city").style.display === "none" ? "flex" : "none";
     }
+
+    document.addEventListener("click", (e) => {
+        let cityBlock = document.querySelector('.choose-city');
+        const withinBoundaries = e.composedPath().includes(city);
+
+        if (!withinBoundaries && cityBlock.style.display !== "none") {
+            cityBlock.style.display = "none";
+        }
+    })
+
+    document.addEventListener("keydown", function (e) {
+        if (e.keyCode === 27) {
+            document.querySelector(".choose-city").style.display = "none";
+        }
+    })
 })
