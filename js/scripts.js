@@ -70,34 +70,40 @@ window.onload = () => {
 }
 
 //Выпадающий список городов
+let cityBlock = document.createElement('div');
+cityBlock.classList.add('choose-city');
 let regions = [];
 
 function buildRegionsList(regions) {
-    let cityBlock = document.createElement('div');
-    cityBlock.classList.add('choose-city');
-
     cityBlock.innerHTML = `
         <div class='search-city'>
             <label>
                 <input type='text' placeholder='Любой регион' autofocus>
             </label>
-            <div class='chosen-city' >
+             <div class="preloader-wrap">
+                <div class="preloader">
+                    <div></div>
+                </div>
+            </div>
+            <div class='chosen-city'>
                 <div class='city-elem'>
                     <p>Москва</p>
                     <a>
-                        <img src='./images/cross.svg' alt='Удалить'>
+                        <img src='./images/cross.svg' alt='Убрать'>
                     </a>
                 </div>
             </div>
         </div>
         <div class='cities'>
+            <a>
+                <span>Россия</span>
+            </a>
             ${regions}
         </div>
         <div class='save-btn'>
             <button type='button'>Сохранить</button>
         </div>
     `;
-
     return cityBlock;
 }
 
@@ -111,23 +117,30 @@ cityIcon.addEventListener('click', function() {
                 },
                 body: JSON.stringify(data)
             });
-            return response.json();
-        }
-        //Отправка запроса
-        postData('https://studika.ru/api/areas', {})
-            .then((data) => {
-                console.log(data)
-                data.forEach(obj => {
-                    regions += `<a>${obj.name}</a>`;
-                })
+        return response.json();
+    }
+    //Отправка запроса
+    postData('https://studika.ru/api/areas', {})
+        .then((data) => {
+            for (let i = 1; i < data.length; i++) {
+                let regionList = data[i];
+                let region = data[i].name;
 
-            const regionsListDOM = buildRegionsList(regions);
-            city.insertBefore(regionsListDOM, city.children[2]);
-            })
+                for (let cities of regionList.cities) {
+                    let citiesList = cities.name;
+                    regions += `<a>
+                        <span>${citiesList}</span>
+                        <span>${region}</span>
+                    </a>`;
+                }
+            }
+        const regionsListDOM = buildRegionsList(regions);
+        city.insertBefore(regionsListDOM, city.children[2]);
+        })
 
-            .catch(function (error) {
-                console.log(error.message);
-            })
+        .catch(function (error) {
+            console.log(error.message);
+        })
     } else {
         let cityBlock = document.querySelector('.choose-city');
         cityBlock.style.display = cityBlock.style.display === 'none' ? 'flex' : 'none';
