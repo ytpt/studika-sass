@@ -74,21 +74,14 @@ let cityBlock = document.createElement('div');
 cityBlock.classList.add('choose-city');
 let regions = [];
 
-function buildRegionsList(spinner, cities) {
+function buildRegionsList(spinner, chosenCity, cities) {
     cityBlock.innerHTML = `
         <div class='search-city'>
             <label>
                 <input type='text' placeholder='Любой регион' autofocus>
             </label>
             ${spinner}
-            <div class='chosen-city'>
-                <div class='city-elem'>
-                    <p>Москва</p>
-                    <a>
-                        <img src='./images/cross.svg' alt='Убрать'>
-                    </a>
-                </div>
-            </div>
+            ${chosenCity}
         </div>
         ${cities}
         <div class='save-btn'>
@@ -117,7 +110,8 @@ cityIcon.addEventListener('click', function() {
                 </div>
             </div>
         `;
-        city.insertBefore(buildRegionsList(spinner, ''), city.children[2]);
+
+        city.insertBefore(buildRegionsList(spinner, '',''), city.children[2]);
 
  //Отправка запроса
         postData('https://studika.ru/api/areas', {})
@@ -139,8 +133,6 @@ cityIcon.addEventListener('click', function() {
                     }
                 }
                 if (data) {
-                    const chosenCity = document.querySelector('.chosen-city');
-                    chosenCity.classList.remove('loading');
                     function buildCitiesList(regions) {
                         return `
                             <div class='cities'>
@@ -148,7 +140,20 @@ cityIcon.addEventListener('click', function() {
                             </div>
                         `;
                     }
-                    city.insertBefore(buildRegionsList('', buildCitiesList(regions)), city.children[2]);
+                    function showChosenCity() {
+                        return `
+                             <div class='chosen-city'>
+                                <div class='city-elem'>
+                                    <p>Москва</p>
+                                    <a>
+                                        <img src='./images/cross.svg' alt='Убрать'>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
+                    city.insertBefore(builder, city.children[2]);
                 }
             })
             .catch(function (error) {
