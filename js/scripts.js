@@ -74,6 +74,16 @@ let cityBlock = document.createElement('div');
 cityBlock.classList.add('choose-city');
 let regions = [];
 
+city.onmouseover = function() {
+    city.style.backgroundColor = '#F1F1F1';
+    city.style.borderRadius = '37px';
+}
+
+city.onmouseleave = function() {
+    city.style.backgroundColor = 'transparent';
+    city.style.borderRadius = '0';
+}
+
 function buildRegionsList(spinner, chosenCity, cities) {
     cityBlock.innerHTML = `
         <div class='search-city'>
