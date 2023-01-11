@@ -54,8 +54,6 @@ a
       @extend %height
       @extend %relative
       margin-left: 16px
-      &:hover
-        @include hover(37px)
       .city-main
         padding: 0 16px 0 40px
       img
@@ -208,9 +206,20 @@ a
     max-height: 223px
     overflow-y: hidden
     margin: 8px 0 25px 0
+    cursor: auto
+    //Google Chrome
     &::-webkit-scrollbar
+      max-width: 8px
+      height: 200px
+    &::-webkit-scrollbar-thumb
       width: 4px
       height: 50px
+      background-color: #d8d8d8
+      border-radius: 45px
+      &:hover
+        background-color: #999
+        width: 8px
+        -webkit-transition: background-color .2s linear , width .2s ease-in-out
     &:hover
       overflow-y: auto
     a
