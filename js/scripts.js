@@ -69,31 +69,29 @@ window.onload = () => {
     }
 }
 
-//Выпадающий список городов
+// Выпадающий список городов
 let cityBlock = document.createElement('div');
 cityBlock.classList.add('choose-city');
 let regions = [];
 
 city.onmouseover = function() {
-    city.style.backgroundColor = '#F1F1F1';
-    city.style.borderRadius = '37px';
+    city.classList.add('onMouse');
 }
 
 city.onmouseleave = function() {
-    city.style.backgroundColor = 'transparent';
-    city.style.borderRadius = '0';
+    city.classList.remove('onMouse');
 }
 
 function buildRegionsList(spinner, chosenCity, cities) {
     cityBlock.innerHTML = `
         <div class='search-city'>
             <label>
-                <input type='text' placeholder='Любой регион' autofocus>
+                <input id='searchCity' type='text' placeholder='Любой регион' autofocus>
             </label>
             ${spinner}
             ${chosenCity}
         </div>
-        ${cities}
+            ${cities}
         <div class='save-btn'>
             <button type='button'>Сохранить</button>
         </div>
@@ -123,31 +121,41 @@ cityIcon.addEventListener('click', function() {
 
         city.insertBefore(buildRegionsList(spinner, '',''), city.children[2]);
 
- //Отправка запроса
+// Отправка запроса на сервер
         postData('https://studika.ru/api/areas', {})
             .then((data) => {
-                regions += `<a>
-                        <span>Россия</span>
-                    </a>
-                `;
-                for (let i = 1; i < data.length; i++) {
+                console.log(data)
+                for (let i = 0; i < data.length; i++) {
                     let regionList = data[i];
                     let region = data[i].name;
+                    let regionHTML = '';
 
-                    for (let cities of regionList.cities) {
-                        let citiesList = cities.name;
-                        regions += `<a>
-                        <span>${citiesList}</span>
-                        <span>${region}</span>
-                    </a>`;
+                    if (regionList.id === 'all'){
+                        regionHTML = `
+                            <li>
+                                <a>${region}</a>
+                            </li>`
+                        ;
+                        regions.push(regionHTML);
+                    } else {
+                        for (let cities of regionList.cities) {
+                            let citiesList = cities.name;
+                            regionHTML = `
+                                <li>
+                                    <a>${citiesList}</a>
+                                    <a>${region}</a>
+                                </li>`
+                            ;
+                            regions.push(regionHTML);
+                        }
                     }
                 }
                 if (data) {
                     function buildCitiesList(regions) {
                         return `
-                            <div class='cities'>
-                                ${regions}
-                            </div>
+                            <ul class='cities'>
+                                ${regions.join(' ')}
+                            </ul>
                         `;
                     }
                     function showChosenCity() {
@@ -164,6 +172,26 @@ cityIcon.addEventListener('click', function() {
                     }
                     const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
                     city.insertBefore(builder, city.children[2]);
+
+                    //фильтрация городов
+                    document.querySelector('#searchCity').oninput = function() {
+                        let val = this.value.trim().toUpperCase();
+                        // console.log(list);
+                        console.log(regions);
+                        // list.forEach(elem => {
+                        //     if (val !== '') {
+                        //         for (let i = 0; i < elem.length; i++) {
+                        //             let txtValue = elem.textContent || elem.innerText;
+                        //             if (txtValue.toUpperCase().includes(val)) {
+                        //                 elem[i].style.display = '';
+                        //             } else {
+                        //                 elem[i].classList.add('loading');
+                        //             }
+                        //         }
+                        //     }
+                        // })
+                    }
+                    return regions;
                 }
             })
             .catch(function (error) {

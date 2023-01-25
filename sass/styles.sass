@@ -1,9 +1,9 @@
 @import url(//db.onlinewebfonts.com/c/353efa59e46e6dcb29eeada2f25f490a?family=Formular+Medium)
 @import "null.style"
 
-@mixin hover($r)
-  background: #F1F1F1
-  border-radius: ($r)
+@mixin hoverEffect($color, $radius)
+  background-color: ($color)
+  border-radius: ($radius)
 
 %between
   display: flex
@@ -92,7 +92,7 @@ a
       margin-right: 10.5px
       padding: 9px 4px
       &:hover
-        @include hover(37px)
+        @include hoverEffect(#F1F1F1, 37px)
       img
         margin-right: 7.5px
       p
@@ -112,7 +112,7 @@ a
   >a
     padding: 2.5px 10px
   .menu_active
-    @include hover(34px)
+    @include hoverEffect(#F1F1F1, 34px)
   div
     @extend %between
     a
@@ -206,6 +206,7 @@ a
     max-height: 223px
     overflow-y: hidden
     margin: 8px 0 25px 0
+    padding: 0
     cursor: auto
     //Google Chrome
     &::-webkit-scrollbar
@@ -222,11 +223,13 @@ a
         -webkit-transition: background-color .2s linear , width .2s ease-in-out
     &:hover
       overflow-y: auto
-    a
+    li
       display: flex
       flex-direction: column
       font-family: "Open Sans", sans-serif
       padding: 11px 16px
+      cursor: pointer
+      text-decoration: none
       span
         font-size: 12px
         line-height: 20px
@@ -240,7 +243,7 @@ a
       &:active
         background: #F1F1F1
       &:hover
-        background: #F1F1F1
+        @include hoverEffect(#F1F1F1, 0)
   .save-btn
     button
       width: 100%
@@ -294,3 +297,5 @@ a
     box-sizing: content-box
 .loading
   display: none
+.onMouse
+  @include hoverEffect(#F1F1F1, 37px)
