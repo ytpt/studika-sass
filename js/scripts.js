@@ -85,6 +85,9 @@ city.onmouseleave = function() {
 function buildRegionsList(spinner, chosenCity, cities) {
     cityBlock.innerHTML = `
         <div class='search-city'>
+            <button class='cross-btn'>
+                 <img src='images/close.svg' alt="Убрать">   
+            </button>
             <label>
                 <input id='searchCity' type='text' placeholder='Любой регион' autofocus>
             </label>
@@ -183,12 +186,18 @@ cityIcon.addEventListener('click', function() {
                     city.insertBefore(builder, city.children[2]);
 
                     // Живой поиск
+                    const cities = document.querySelectorAll('.region-elem');
                     const input = document.getElementById('searchCity');
+                    const crossBtn = document.querySelector('.cross-btn');
                     input.focus();
                     input.oninput = function() {
-                        const cities = document.querySelectorAll('.region-elem');
                         let val = this.value.trim();
                         if (val) {
+                            crossBtn.style.display = 'block';
+                            crossBtn.addEventListener('click', function() {
+                                input.value = '';
+                                clearInput();
+                            });
                             cities.forEach(function(elem) {
                                 if (elem.innerText.search(RegExp(val,'gi')) === -1) {
                                     const li = elem.parentNode;
@@ -201,12 +210,18 @@ cityIcon.addEventListener('click', function() {
                                 }
                             })
                         } else {
-                            cities.forEach(function(elem) {
-                                const li = elem.parentNode;
-                                li.style.display = 'flex';
-                                elem.innerHTML = elem.innerText;
-                            })
+                            input.value = '';
+                            clearInput();
                         }
+                    }
+
+                    function clearInput() {
+                        crossBtn.style.display = 'none';
+                        cities.forEach(function(elem) {
+                            const li = elem.parentNode;
+                            li.style.display = 'flex';
+                            elem.innerHTML = elem.innerText;
+                        })
                     }
 
                     function insertMark(string, pos, len) {
