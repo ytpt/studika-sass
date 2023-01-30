@@ -129,7 +129,7 @@ cityIcon.addEventListener('click', function() {
                     let region = data[i].name;
                     if (regionList.id === 'all'){
                         let regionLi = `
-                            <li>
+                            <li class="cities-elem">
                                 <span class="region-elem">
                                     ${region}
                                 </span>
@@ -138,7 +138,7 @@ cityIcon.addEventListener('click', function() {
                         regions.push(regionLi);
                     } else {
                         let regionLi = `
-                            <li>
+                            <li class="cities-elem">
                                 <span class="region-elem">
                                     ${region}
                                 </span>
@@ -148,7 +148,7 @@ cityIcon.addEventListener('click', function() {
 
                         for (let cities of regionList.cities) {
                             let regionLi = `
-                                <li>
+                                <li class="cities-elem">
                                     <span class="region-elem">${cities.name}</span>
                                     ${region}
                                 </li>
@@ -180,17 +180,25 @@ cityIcon.addEventListener('click', function() {
                     const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
                     city.insertBefore(builder, city.children[2]);
 
-                    //фильтрация городов
-                    let regionEl = document.querySelectorAll('.region-elem');
-                    let input = document.getElementById('searchCity');
-                    input.oninput = function() {
-                        let val = this.value.trim();
+                    // Живой поиск
+                   document.getElementById('searchCity').oninput = function() {
+                        let val = this.value.trim().toLowerCase();
                         let list = document.querySelectorAll('.region-elem');
-                    }
-
-                    function insertMark(string, pos, len) {
-                        return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len)
-                            + '</mark>' + string.slice(pos + len);
+                        if (val) {
+                            list.forEach(el => {
+                                if (el.innerText.search(val) === -1) {
+                                   let li = el.parentNode;
+                                   li.classList.remove('cities-elem');
+                                   li.classList.add('loading');
+                                }
+                            })
+                        } else {
+                            list.forEach(el => {
+                                let li = el.parentNode;
+                                li.classList.remove('loading');
+                                li.classList.add('cities-elem');
+                            })
+                        }
                     }
                 }
             })
