@@ -165,6 +165,7 @@ cityIcon.addEventListener('click', function() {
                             </ul>
                         `;
                     }
+
                     function showChosenCity() {
                         return `
                              <div class='chosen-city'>
@@ -177,19 +178,20 @@ cityIcon.addEventListener('click', function() {
                             </div>
                         `;
                     }
+
                     const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
                     city.insertBefore(builder, city.children[2]);
 
                     // Живой поиск
-                   document.getElementById('searchCity').oninput = function() {
-                        let val = this.value.trim().toLowerCase();
+                    document.getElementById('searchCity').oninput = function () {
+                        let val = this.value.trim();
                         let list = document.querySelectorAll('.region-elem');
                         if (val) {
                             list.forEach(el => {
-                                if (el.innerText.search(val) === -1) {
-                                   let li = el.parentNode;
-                                   li.classList.remove('cities-elem');
-                                   li.classList.add('loading');
+                                if (el.innerText.search(RegExp(val,"gi")) === -1) {
+                                    let li = el.parentNode;
+                                    li.classList.remove('cities-elem');
+                                    li.classList.add('loading');
                                 }
                             })
                         } else {
