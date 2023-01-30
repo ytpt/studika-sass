@@ -139,7 +139,9 @@ cityIcon.addEventListener('click', function() {
                     } else {
                         let regionLi = `
                             <li>
-                                ${region}
+                                <span class="region-elem">
+                                    ${region}
+                                </span>
                             </li>
                         `;
                         regions.push(regionLi);
@@ -179,16 +181,17 @@ cityIcon.addEventListener('click', function() {
                     city.insertBefore(builder, city.children[2]);
 
                     //фильтрация городов
-                    // let regionEl = document.querySelectorAll('.region-elem');
-                    // let input = document.getElementById('searchCity');
-                    // input.oninput = function() {
-                    //     let val = this.value.trim();
-                    // }
-                    //
-                    // function insertMark(string, pos, len) {
-                    //     return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len)
-                    //         + '</mark>' + string.slice(pos + len);
-                    // }
+                    let regionEl = document.querySelectorAll('.region-elem');
+                    let input = document.getElementById('searchCity');
+                    input.oninput = function() {
+                        let val = this.value.trim();
+                        let list = document.querySelectorAll('.region-elem');
+                    }
+
+                    function insertMark(string, pos, len) {
+                        return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len)
+                            + '</mark>' + string.slice(pos + len);
+                    }
                 }
             })
             .catch(function (error) {
