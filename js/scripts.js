@@ -183,23 +183,35 @@ cityIcon.addEventListener('click', function() {
                     city.insertBefore(builder, city.children[2]);
 
                     // Живой поиск
-                    const list = document.querySelectorAll('.region-elem');
                     const input = document.getElementById('searchCity');
                     input.focus();
                     input.oninput = function() {
+                        const cities = document.querySelectorAll('.region-elem');
                         let val = this.value.trim();
-                        list.forEach(el => {
-                            let li = el.parentNode;
-                            li.style.display = 'flex';
-                        })
                         if (val) {
-                            list.forEach(el => {
-                                if (el.innerText.search(RegExp(val,"gi")) === -1) {
-                                    let li = el.parentNode;
+                            cities.forEach(function(elem) {
+                                if (elem.innerText.search(RegExp(val,'gi')) === -1) {
+                                    const li = elem.parentNode;
                                     li.style.display = 'none';
+                                } else {
+                                    const li = elem.parentNode;
+                                    li.style.display = 'flex';
+                                    let str = elem.innerText;
+                                    elem.innerHTML = insertMark(str, elem.innerText.search(RegExp(val,'gi')), val.length);
                                 }
                             })
+                        } else {
+                            cities.forEach(function(elem) {
+                                const li = elem.parentNode;
+                                li.style.display = 'flex';
+                                elem.innerHTML = elem.innerText;
+                            })
                         }
+                    }
+
+                    function insertMark(string, pos, len) {
+                        return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len) +
+                            '</mark>' + string.slice(pos + len);
                     }
                 }
             })
