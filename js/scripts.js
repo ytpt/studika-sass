@@ -124,29 +124,34 @@ cityIcon.addEventListener('click', function() {
 // Отправка запроса на сервер
         postData('https://studika.ru/api/areas', {})
             .then((data) => {
-                console.log(data)
                 for (let i = 0; i < data.length; i++) {
                     let regionList = data[i];
                     let region = data[i].name;
-                    let regionHTML = '';
-
                     if (regionList.id === 'all'){
-                        regionHTML = `
+                        let regionLi = `
                             <li>
-                                <a>${region}</a>
-                            </li>`
-                        ;
-                        regions.push(regionHTML);
+                                <span class="region-elem">
+                                    ${region}
+                                </span>
+                            </li>
+                        `;
+                        regions.push(regionLi);
                     } else {
+                        let regionLi = `
+                            <li>
+                                ${region}
+                            </li>
+                        `;
+                        regions.push(regionLi);
+
                         for (let cities of regionList.cities) {
-                            let citiesList = cities.name;
-                            regionHTML = `
+                            let regionLi = `
                                 <li>
-                                    <a>${citiesList}</a>
-                                    <a>${region}</a>
-                                </li>`
-                            ;
-                            regions.push(regionHTML);
+                                    <span class="region-elem">${cities.name}</span>
+                                    ${region}
+                                </li>
+                            `;
+                            regions.push(regionLi);
                         }
                     }
                 }
@@ -174,24 +179,16 @@ cityIcon.addEventListener('click', function() {
                     city.insertBefore(builder, city.children[2]);
 
                     //фильтрация городов
-                    document.querySelector('#searchCity').oninput = function() {
-                        let val = this.value.trim().toUpperCase();
-                        // console.log(list);
-                        console.log(regions);
-                        // list.forEach(elem => {
-                        //     if (val !== '') {
-                        //         for (let i = 0; i < elem.length; i++) {
-                        //             let txtValue = elem.textContent || elem.innerText;
-                        //             if (txtValue.toUpperCase().includes(val)) {
-                        //                 elem[i].style.display = '';
-                        //             } else {
-                        //                 elem[i].classList.add('loading');
-                        //             }
-                        //         }
-                        //     }
-                        // })
-                    }
-                    return regions;
+                    // let regionEl = document.querySelectorAll('.region-elem');
+                    // let input = document.getElementById('searchCity');
+                    // input.oninput = function() {
+                    //     let val = this.value.trim();
+                    // }
+                    //
+                    // function insertMark(string, pos, len) {
+                    //     return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len)
+                    //         + '</mark>' + string.slice(pos + len);
+                    // }
                 }
             })
             .catch(function (error) {
