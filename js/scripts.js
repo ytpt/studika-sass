@@ -183,22 +183,21 @@ cityIcon.addEventListener('click', function() {
                     city.insertBefore(builder, city.children[2]);
 
                     // Живой поиск
-                    document.getElementById('searchCity').oninput = function () {
+                    const list = document.querySelectorAll('.region-elem');
+                    const input = document.getElementById('searchCity');
+                    input.focus();
+                    input.oninput = function() {
                         let val = this.value.trim();
-                        let list = document.querySelectorAll('.region-elem');
+                        list.forEach(el => {
+                            let li = el.parentNode;
+                            li.style.display = 'flex';
+                        })
                         if (val) {
                             list.forEach(el => {
                                 if (el.innerText.search(RegExp(val,"gi")) === -1) {
                                     let li = el.parentNode;
-                                    li.classList.remove('cities-elem');
-                                    li.classList.add('loading');
+                                    li.style.display = 'none';
                                 }
-                            })
-                        } else {
-                            list.forEach(el => {
-                                let li = el.parentNode;
-                                li.classList.remove('loading');
-                                li.classList.add('cities-elem');
                             })
                         }
                     }
