@@ -197,10 +197,12 @@ cityIcon.addEventListener('click', function() {
                 input.focus();
                 input.oninput = function() {
                     let val = this.value.trim();
-                    val ? filterInput(val) : clearInput(input)
+                    val ? filterInput(val) : clearInput
                 }
 
-                crossBtn.addEventListener('click', clearInput);
+                crossBtn.addEventListener('click', () => {
+                    clearInput(input);
+                });
 
                 function filterInput(val) {
                     crossBtn.style.display = 'block';
