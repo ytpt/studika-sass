@@ -148,7 +148,7 @@ cityIcon.addEventListener('click', function() {
 // Отправка запроса на сервер
         postData('https://studika.ru/api/areas', {})
             .then((data) => {
-                for (let i in data) {
+                for (let i = 0; i < data.length; i++) {
                     let regionList = data[i],
                         region = data[i].name;
                     if (regionList.id === 'all') {
