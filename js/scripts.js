@@ -205,9 +205,10 @@ cityIcon.addEventListener('click', function() {
                 function filterInput(val) {
                     crossBtn.style.display = 'block';
                     cities.forEach(elem => {
-                        const city = elem.innerText.search(RegExp(val,'gi'));
-                        const li = elem.parentNode;
+                        const city = elem.innerText.search(RegExp(val,'gi')),
+                            li = elem.parentNode;
                         let str = elem.innerText;
+
                         if (city === -1) {
                             li.style.display = 'none';
                         } else {
@@ -220,7 +221,7 @@ cityIcon.addEventListener('click', function() {
                 function clearInput(input) {
                     input.value = '';
                     crossBtn.style.display = 'none';
-                    cities.forEach(function(elem) {
+                    cities.forEach(elem => {
                         const li = elem.parentNode;
                         li.style.display = 'flex';
                         elem.innerHTML = elem.innerText;
@@ -242,8 +243,8 @@ cityIcon.addEventListener('click', function() {
     }
 
     document.addEventListener('click', (e) => {
-        let cityBlock = document.querySelector('.choose-city');
-        const withinBoundaries = e.composedPath().includes(city);
+        const cityBlock = document.querySelector('.choose-city'),
+            withinBoundaries = e.composedPath().includes(city);
 
         if (!withinBoundaries && cityBlock.style.display !== 'none') {
             cityBlock.style.display = 'none';
