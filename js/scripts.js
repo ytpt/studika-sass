@@ -82,6 +82,35 @@ city.onmouseleave = function() {
     city.classList.remove('onMouse');
 }
 
+const spinner = `
+    <div class='preloader-wrap'>
+        <div class='preloader'>
+            <div></div>
+        </div>
+    </div>
+`;
+
+function buildCitiesList(regions) {
+    return `
+        <ul class='cities'>
+            ${regions.join(' ')}
+        </ul>
+    `;
+}
+
+function showChosenCity() {
+    return `
+         <div class='chosen-city'>
+            <div class='city-elem'>
+                <p>Москва</p>
+                <a>
+                    <img src='./images/cross.svg' alt='Убрать'>
+                </a>
+            </div>
+        </div>
+    `;
+}
+
 function buildRegionsList(spinner, chosenCity, cities) {
     cityBlock.innerHTML = `
         <div class='search-city'>
@@ -114,23 +143,15 @@ cityIcon.addEventListener('click', function() {
             });
             return response.json();
         }
-        const spinner = `
-            <div class='preloader-wrap'>
-                <div class='preloader'>
-                    <div></div>
-                </div>
-            </div>
-        `;
-
         city.insertBefore(buildRegionsList(spinner, '',''), city.children[2]);
 
 // Отправка запроса на сервер
         postData('https://studika.ru/api/areas', {})
             .then((data) => {
                 for (let i in data) {
-                    let regionList = data[i];
-                    let region = data[i].name;
-                    if (regionList.id === 'all'){
+                    let regionList = data[i],
+                        region = data[i].name;
+                    if (regionList.id === 'all') {
                         let regionLi = `
                             <li class="cities-elem">
                                 <span class="region-elem">
@@ -160,55 +181,39 @@ cityIcon.addEventListener('click', function() {
                         }
                     }
                 }
-                if (data) {
-                    function buildCitiesList(regions) {
-                        return `
-                            <ul class='cities'>
-                                ${regions.join(' ')}
-                            </ul>
-                        `;
+                data
+                    && buildCitiesList(regions)
+                    && showChosenCity()
+                    && buildRegionsList('', showChosenCity(), buildCitiesList(regions));
+
+                const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
+                city.insertBefore(builder, city.children[2]);
+
+                // Живой поиск
+                const cities = document.querySelectorAll('.region-elem');
+                const input = document.getElementById('searchCity');
+                const crossBtn = document.querySelector('.cross-btn');
+
+                input.focus();
+                input.oninput = function() {
+                    let val = this.value.trim();
+                    if (val) {
+                        crossBtn.style.display = 'block';
+                        cities.forEach(function(elem) {
+                            const li = elem.parentNode;
+                            let str = elem.innerText;
+
+                            if (elem.innerText.search(RegExp(val,'gi')) === -1) {
+                                li.style.display = 'none';
+                            } else {
+                                li.style.display = 'flex';
+                                elem.innerHTML = insertMark(str, elem.innerText.search(RegExp(val,'gi')), val.length);
+                            }
+                        })
+                    } else {
+                        clearInput(input);
                     }
-
-                    function showChosenCity() {
-                        return `
-                             <div class='chosen-city'>
-                                <div class='city-elem'>
-                                    <p>Москва</p>
-                                    <a>
-                                        <img src='./images/cross.svg' alt='Убрать'>
-                                    </a>
-                                </div>
-                            </div>
-                        `;
-                    }
-
-                    const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
-                    city.insertBefore(builder, city.children[2]);
-
-                    // Живой поиск
-                    const cities = document.querySelectorAll('.region-elem');
-                    const input = document.getElementById('searchCity');
-                    const crossBtn = document.querySelector('.cross-btn');
-                    input.focus();
-                    input.oninput = function() {
-                        let val = this.value.trim();
-                        if (val) {
-                            crossBtn.style.display = 'block';
-                            cities.forEach(function(elem) {
-                                const li = elem.parentNode;
-                                let str = elem.innerText;
-
-                                if (elem.innerText.search(RegExp(val,'gi')) === -1) {
-                                    li.style.display = 'none';
-                                } else {
-                                    li.style.display = 'flex';
-                                    elem.innerHTML = insertMark(str, elem.innerText.search(RegExp(val,'gi')), val.length);
-                                }
-                            })
-                        } else {
-                            clearInput(input);
-                        }
-                    }
+                }
 
                     crossBtn.addEventListener('click', function() {
                         clearInput(input);
@@ -225,10 +230,8 @@ cityIcon.addEventListener('click', function() {
                     }
 
                     function insertMark(string, pos, len) {
-                        return string.slice(0, pos) + '<mark>' + string.slice(pos, pos + len) +
-                            '</mark>' + string.slice(pos + len);
+                        return `${string.slice(0, pos)}<mark>${string.slice(pos, pos + len)}</mark>${string.slice(pos + len)}`;
                     }
-                }
             })
             .catch(function (error) {
                 console.log(error.message);
