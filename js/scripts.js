@@ -197,41 +197,41 @@ cityIcon.addEventListener('click', function() {
                 input.focus();
                 input.oninput = function() {
                     let val = this.value.trim();
-                    if (val) {
-                        crossBtn.style.display = 'block';
-                        cities.forEach(function(elem) {
-                            const li = elem.parentNode;
-                            let str = elem.innerText;
-
-                            if (elem.innerText.search(RegExp(val,'gi')) === -1) {
-                                li.style.display = 'none';
-                            } else {
-                                li.style.display = 'flex';
-                                elem.innerHTML = insertMark(str, elem.innerText.search(RegExp(val,'gi')), val.length);
-                            }
-                        })
-                    } else {
-                        clearInput(input);
-                    }
+                    val ? filterInput(val) : clearInput(input)
                 }
 
-                    crossBtn.addEventListener('click', function() {
-                        clearInput(input);
-                    });
+                crossBtn.addEventListener('click', clearInput);
 
-                    function clearInput(input) {
-                        input.value = '';
-                        crossBtn.style.display = 'none';
-                        cities.forEach(function(elem) {
-                            const li = elem.parentNode;
+                function filterInput(val) {
+                    crossBtn.style.display = 'block';
+                    cities.forEach(elem => {
+                        const city = elem.innerText.search(RegExp(val,'gi'));
+                        const li = elem.parentNode;
+                        let str = elem.innerText;
+                        if (city === -1) {
+                            li.style.display = 'none';
+                        } else {
                             li.style.display = 'flex';
-                            elem.innerHTML = elem.innerText;
-                        })
-                    }
+                            elem.innerHTML = insertMark(str, city, val.length);
+                        }
+                    })
+                }
 
-                    function insertMark(string, pos, len) {
-                        return `${string.slice(0, pos)}<mark>${string.slice(pos, pos + len)}</mark>${string.slice(pos + len)}`;
-                    }
+                function clearInput(input) {
+                    input.value = '';
+                    crossBtn.style.display = 'none';
+                    cities.forEach(function(elem) {
+                        const li = elem.parentNode;
+                        li.style.display = 'flex';
+                        elem.innerHTML = elem.innerText;
+                    })
+                }
+
+                function insertMark(string, pos, len) {
+                    return `
+                        ${string.slice(0, pos)}<mark>${string.slice(pos, pos + len)}</mark>${string.slice(pos + len)}
+                    `;
+                }
             })
             .catch(function (error) {
                 console.log(error.message);
