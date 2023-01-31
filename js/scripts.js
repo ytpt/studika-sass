@@ -127,7 +127,7 @@ cityIcon.addEventListener('click', function() {
 // Отправка запроса на сервер
         postData('https://studika.ru/api/areas', {})
             .then((data) => {
-                for (let i = 0; i < data.length; i++) {
+                for (let i in data) {
                     let regionList = data[i];
                     let region = data[i].name;
                     if (regionList.id === 'all'){
@@ -194,28 +194,28 @@ cityIcon.addEventListener('click', function() {
                         let val = this.value.trim();
                         if (val) {
                             crossBtn.style.display = 'block';
-                            crossBtn.addEventListener('click', function() {
-                                input.value = '';
-                                clearInput();
-                            });
                             cities.forEach(function(elem) {
+                                const li = elem.parentNode;
+                                let str = elem.innerText;
+
                                 if (elem.innerText.search(RegExp(val,'gi')) === -1) {
-                                    const li = elem.parentNode;
                                     li.style.display = 'none';
                                 } else {
-                                    const li = elem.parentNode;
                                     li.style.display = 'flex';
-                                    let str = elem.innerText;
                                     elem.innerHTML = insertMark(str, elem.innerText.search(RegExp(val,'gi')), val.length);
                                 }
                             })
                         } else {
-                            input.value = '';
-                            clearInput();
+                            clearInput(input);
                         }
                     }
 
-                    function clearInput() {
+                    crossBtn.addEventListener('click', function() {
+                        clearInput(input);
+                    });
+
+                    function clearInput(input) {
+                        input.value = '';
                         crossBtn.style.display = 'none';
                         cities.forEach(function(elem) {
                             const li = elem.parentNode;
