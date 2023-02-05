@@ -246,7 +246,11 @@ cityIcon.addEventListener('click', function() {
                         const cloneElem = moscowElem.cloneNode(true);
                         cloneElem.querySelector('p').innerHTML = `${city.textContent}`;
 
+                        cloneElem.querySelector('a').addEventListener('click', function() {
+                            chosenCityBlock.removeChild(cloneElem);
+                        })
                         chosenCityBlock.appendChild(cloneElem);
+                        console.log(chosenCityBlock);
                     });
                 })
             })
