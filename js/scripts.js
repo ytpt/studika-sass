@@ -100,13 +100,11 @@ function buildCitiesList(regions) {
 
 function showChosenCity() {
     return `
-         <div class='chosen-city'>
-            <div class='city-elem'>
-                <p>Москва</p>
-                <a>
-                    <img src='./images/cross.svg' alt='Убрать'>
-                </a>
-            </div>
+        <div class='city-elem'>
+            <p>Москва</p>
+            <a>
+                <img src='./images/cross.svg' alt='Убрать'>
+            </a>
         </div>
     `;
 }
@@ -121,7 +119,9 @@ function buildRegionsList(spinner, chosenCity, cities) {
                 <input id='searchCity' type='text' placeholder='Любой регион' autofocus>
             </label>
             ${spinner}
-            ${chosenCity}
+            <div class='chosen-city'>
+                ${chosenCity}
+            </div>
         </div>
             ${cities}
         <div class='save-btn'>
@@ -150,9 +150,10 @@ cityIcon.addEventListener('click', function() {
             .then((data) => {
                 for (let i = 0; i < data.length; i++) {
                     let regionList = data[i],
-                        region = data[i].name;
+                        region = data[i].name,
+                        regionLi;
                     if (regionList.id === 'all') {
-                        let regionLi = `
+                        regionLi = `
                             <li class="cities-elem">
                                 <span class="region-elem">
                                     ${region}
@@ -161,7 +162,7 @@ cityIcon.addEventListener('click', function() {
                         `;
                         regions.push(regionLi);
                     } else {
-                        let regionLi = `
+                        regionLi = `
                             <li class="cities-elem">
                                 <span class="region-elem">
                                     ${region}
@@ -171,7 +172,7 @@ cityIcon.addEventListener('click', function() {
                         regions.push(regionLi);
 
                         for (let cities of regionList.cities) {
-                            let regionLi = `
+                            regionLi = `
                                 <li class="cities-elem">
                                     <span class="region-elem">${cities.name}</span>
                                     ${region}
@@ -181,12 +182,13 @@ cityIcon.addEventListener('click', function() {
                         }
                     }
                 }
+                const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
+
                 data
                     && buildCitiesList(regions)
                     && showChosenCity()
                     && buildRegionsList('', showChosenCity(), buildCitiesList(regions));
 
-                const builder = buildRegionsList('', showChosenCity(), buildCitiesList(regions));
                 city.insertBefore(builder, city.children[2]);
 
                 // Живой поиск
@@ -235,6 +237,18 @@ cityIcon.addEventListener('click', function() {
                         ${string.slice(0, pos)}<mark>${string.slice(pos, pos + len)}</mark>${string.slice(pos + len)}
                     `;
                 }
+
+                // Добавление выбранного города в список
+                let chosenCityBlock = document.querySelector('.chosen-city');
+                cities.forEach(city => {
+                    city.parentNode.addEventListener('click', function() {
+                        const moscowElem = document.querySelector('.city-elem');
+                        const cloneElem = moscowElem.cloneNode(true);
+                        cloneElem.querySelector('p').innerHTML = `${city.textContent}`;
+
+                        chosenCityBlock.appendChild(cloneElem);
+                    });
+                })
             })
             .catch(function (error) {
                 console.log(error.message);
