@@ -90,47 +90,6 @@ const spinner = `
     </div>
 `;
 
-function buildCitiesList(regions) {
-    return `
-        <ul class='cities'>
-            ${regions.join(' ')}
-        </ul>
-    `;
-}
-
-function showChosenCity() {
-    return `
-        <div class='city-elem'>
-            <p>Москва</p>
-            <a>
-                <img src='./images/cross.svg' alt='Убрать'>
-            </a>
-        </div>
-    `;
-}
-
-function buildRegionsList(spinner, chosenCity, cities) {
-    cityBlock.innerHTML = `
-        <div class='search-city'>
-            <button class='cross-btn'>
-                 <img src='images/close.svg' alt="Убрать">   
-            </button>
-            <label>
-                <input id='searchCity' type='text' placeholder='Любой регион' autofocus>
-            </label>
-            ${spinner}
-            <div class='chosen-city'>
-                ${chosenCity}
-            </div>
-        </div>
-            ${cities}
-        <div class='save-btn'>
-            <button type='button'>Сохранить</button>
-        </div>
-    `;
-    return cityBlock;
-}
-
 cityIcon.addEventListener('click', function() {
     if (regions.length === 0) {
         const postData = async (url = '', data = {}) => {
@@ -193,66 +152,10 @@ cityIcon.addEventListener('click', function() {
 
                 // Живой поиск
                 const cities = document.querySelectorAll('.region-elem');
-                const input = document.getElementById('searchCity');
-                const crossBtn = document.querySelector('.cross-btn');
+                liveSearching(cities);
 
-                input.focus();
-                input.oninput = function() {
-                    let val = this.value.trim();
-                    val ? filterInput(val) : clearInput(input)
-                }
-
-                crossBtn.addEventListener('click', () => {
-                    clearInput(input);
-                });
-
-                function filterInput(val) {
-                    crossBtn.style.display = 'block';
-                    cities.forEach(elem => {
-                        const city = elem.innerText.search(RegExp(val,'gi')),
-                            li = elem.parentNode;
-                        let str = elem.innerText;
-
-                        if (city === -1) {
-                            li.style.display = 'none';
-                        } else {
-                            li.style.display = 'flex';
-                            elem.innerHTML = insertMark(str, city, val.length);
-                        }
-                    })
-                }
-
-                function clearInput(input) {
-                    input.value = '';
-                    crossBtn.style.display = 'none';
-                    cities.forEach(elem => {
-                        const li = elem.parentNode;
-                        li.style.display = 'flex';
-                        elem.innerHTML = elem.innerText;
-                    })
-                }
-
-                function insertMark(string, pos, len) {
-                    return `
-                        ${string.slice(0, pos)}<mark>${string.slice(pos, pos + len)}</mark>${string.slice(pos + len)}
-                    `;
-                }
-
-                // Добавление выбранного города в список
-                let chosenCityBlock = document.querySelector('.chosen-city');
-                cities.forEach(city => {
-                    city.parentNode.addEventListener('click', function() {
-                        const moscowElem = document.querySelector('.city-elem');
-                        const cloneElem = moscowElem.cloneNode(true);
-                        cloneElem.querySelector('p').innerHTML = `${city.textContent}`;
-
-                        cloneElem.querySelector('a').addEventListener('click', function() {
-                            chosenCityBlock.removeChild(cloneElem);
-                        })
-                        chosenCityBlock.appendChild(cloneElem);
-                        console.log(chosenCityBlock);
-                    });
-                })
+                // Управление выбранным городом в блоке chosenCity
+                manageChosenCity(cities);
             })
             .catch(function (error) {
                 console.log(error.message);
@@ -263,8 +166,7 @@ cityIcon.addEventListener('click', function() {
     }
 
     document.addEventListener('click', (e) => {
-        const cityBlock = document.querySelector('.choose-city'),
-            withinBoundaries = e.composedPath().includes(city);
+        let withinBoundaries = e.composedPath().includes(city);
 
         if (!withinBoundaries && cityBlock.style.display !== 'none') {
             cityBlock.style.display = 'none';
@@ -276,4 +178,118 @@ cityIcon.addEventListener('click', function() {
             document.querySelector('.choose-city').style.display = 'none';
         }
     })
+
+    function buildCitiesList(regions) {
+        return `
+        <ul class='cities'>
+            ${regions.join(' ')}
+        </ul>
+    `;
+    }
+
+    function showChosenCity() {
+        return `
+        <div class='city-elem'>
+            <p>Москва</p>
+            <a>
+                <img src='./images/cross.svg' alt='Убрать'>
+            </a>
+        </div>
+    `;
+    }
+
+    function buildRegionsList(spinner, chosenCity, cities) {
+        cityBlock.innerHTML = `
+        <div class='search-city'>
+            <button class='cross-btn'>
+                 <img src='images/close.svg' alt="Убрать">   
+            </button>
+            <label>
+                <input id='searchCity' type='text' placeholder='Любой регион' autofocus>
+            </label>
+            ${spinner}
+            <div class='chosen-city'>
+                ${chosenCity}
+            </div>
+        </div>
+            ${cities}
+        <div class='save-btn'>
+            <button type='button'>Сохранить</button>
+        </div>
+    `;
+        return cityBlock;
+    }
+
+    function filterInput(val, cities) {
+        document.querySelector('.cross-btn').style.display = 'block';
+        cities.forEach(elem => {
+            const city = elem.innerText.search(RegExp(val,'gi')),
+                li = elem.parentNode;
+            let str = elem.innerText;
+
+            if (city === -1) {
+                li.style.display = 'none';
+            } else {
+                li.style.display = 'flex';
+                elem.innerHTML = insertMark(str, city, val.length);
+            }
+        })
+    }
+
+    function clearInput(input, cities) {
+        input.value = '';
+        document.querySelector('.cross-btn').style.display = 'none';
+        cities.forEach(elem => {
+            const li = elem.parentNode;
+            li.style.display = 'flex';
+            elem.innerHTML = elem.innerText;
+        })
+    }
+
+    function insertMark(string, pos, len) {
+        return `
+                        ${string.slice(0, pos)}<mark>${string.slice(pos, pos + len)}</mark>${string.slice(pos + len)}
+                    `;
+    }
+
+    function liveSearching(cities) {
+        const input = document.getElementById('searchCity');
+        const crossBtn = document.querySelector('.cross-btn');
+
+        input.focus();
+        input.oninput = function() {
+            let val = this.value.trim();
+            val ? filterInput(val, cities) : clearInput(input)
+        }
+        crossBtn.addEventListener('click', () => {
+            clearInput(input, cities);
+        });
+    }
+
+    function manageChosenCity(cities) {
+        cities.forEach(city => {
+            city.parentNode.addEventListener('click', function() {
+                let chosenCityBlock = document.querySelector('.chosen-city');
+                let chosenCities = chosenCityBlock.querySelectorAll('.city-elem p');
+                let isCityExist = false;
+
+                let cloneElem = document.querySelector('.city-elem').cloneNode(true);
+                const cityName = city.textContent.trim();
+                cloneElem.querySelector('p').innerHTML = cityName;
+
+                chosenCities.forEach(elem => {
+                    if (elem.textContent === cityName) {
+                        isCityExist = true;
+                    }
+                })
+
+                if (!isCityExist) {
+                    cloneElem.querySelector('a').addEventListener('click', function() {
+                        chosenCityBlock.removeChild(cloneElem);
+                    })
+                    chosenCityBlock.appendChild(cloneElem);
+                }
+            });
+        })
+    }
 })
