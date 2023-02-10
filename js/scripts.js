@@ -271,7 +271,7 @@ cityIcon.addEventListener('click', function() {
         let moscowElem = chosenCityBlock.querySelector('.city-elem');
 
         moscowElem.querySelector('a').addEventListener('click', function() {
-            chosenCityBlock.removeChild(moscowElem);
+            softDeleteChosenElem(chosenCityBlock, moscowElem);
             if (!moscowElem) {
                 chosenCityBlock.style.display = 'none';
             }
@@ -289,24 +289,25 @@ cityIcon.addEventListener('click', function() {
                 chosenCitiesP.forEach(elem => {
                     if (elem.textContent === cityName) {
                         isCityExist = true;
-                        softDeleteElem(chosenCityBlock, elem.parentNode);
+                        softDeleteChosenElem(chosenCityBlock, elem.parentNode);
                     }
                 })
 
                 if (!isCityExist) {
                     cloneElem.querySelector('a').addEventListener('click', function() {
-                        softDeleteElem(chosenCityBlock, cloneElem);
+                        softDeleteChosenElem(chosenCityBlock, cloneElem);
                         if (!chosenCitiesP) {
                             chosenCityBlock.style.display = 'none';
                         }
                     })
                     chosenCityBlock.appendChild(cloneElem);
+                    cloneElem.style.opacity = '1';
                     chosenCityBlock.style.display = 'flex';
                 }
             });
         })
     }
-    function softDeleteElem(parent, elem) {
+    function softDeleteChosenElem(parent, elem) {
         setTimeout(function() {
             elem.style.opacity = '0';
             setTimeout(function() {
