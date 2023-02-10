@@ -289,13 +289,13 @@ cityIcon.addEventListener('click', function() {
                 chosenCitiesP.forEach(elem => {
                     if (elem.textContent === cityName) {
                         isCityExist = true;
-                        chosenCityBlock.removeChild(elem.parentNode);
+                        softDeleteElem(chosenCityBlock, elem.parentNode);
                     }
                 })
 
                 if (!isCityExist) {
                     cloneElem.querySelector('a').addEventListener('click', function() {
-                        chosenCityBlock.removeChild(cloneElem);
+                        softDeleteElem(chosenCityBlock, cloneElem);
                         if (!chosenCitiesP) {
                             chosenCityBlock.style.display = 'none';
                         }
@@ -305,5 +305,13 @@ cityIcon.addEventListener('click', function() {
                 }
             });
         })
+    }
+    function softDeleteElem(parent, elem) {
+        setTimeout(function() {
+            elem.style.opacity = '0';
+            setTimeout(function() {
+                parent.removeChild(elem);
+            }, 400);
+        }, 200);
     }
 })
