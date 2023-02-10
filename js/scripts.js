@@ -267,17 +267,26 @@ cityIcon.addEventListener('click', function() {
     }
 
     function manageChosenCity(cities) {
+        let chosenCityBlock = document.querySelector('.chosen-city');
+        let moscowElem = chosenCityBlock.querySelector('.city-elem');
+
+        moscowElem.querySelector('a').addEventListener('click', function() {
+            chosenCityBlock.removeChild(moscowElem);
+            if (!moscowElem) {
+                chosenCityBlock.style.display = 'none';
+            }
+        })
+
         cities.forEach(city => {
             city.parentNode.addEventListener('click', function() {
-                let chosenCityBlock = document.querySelector('.chosen-city');
-                let chosenCities = chosenCityBlock.querySelectorAll('.city-elem p');
+                let chosenCitiesP = chosenCityBlock.querySelectorAll('.city-elem p');
                 let isCityExist = false;
 
-                let cloneElem = document.querySelector('.city-elem').cloneNode(true);
+                let cloneElem = moscowElem.cloneNode(true);
                 const cityName = city.textContent.trim();
                 cloneElem.querySelector('p').innerHTML = cityName;
 
-                chosenCities.forEach(elem => {
+                chosenCitiesP.forEach(elem => {
                     if (elem.textContent === cityName) {
                         isCityExist = true;
                     }
@@ -286,8 +295,12 @@ cityIcon.addEventListener('click', function() {
                 if (!isCityExist) {
                     cloneElem.querySelector('a').addEventListener('click', function() {
                         chosenCityBlock.removeChild(cloneElem);
+                        if (!chosenCitiesP) {
+                            chosenCityBlock.style.display = 'none';
+                        }
                     })
                     chosenCityBlock.appendChild(cloneElem);
+                    chosenCityBlock.style.display = 'flex';
                 }
             });
         })
