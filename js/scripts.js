@@ -289,6 +289,7 @@ cityIcon.addEventListener('click', function() {
                 chosenCitiesP.forEach(elem => {
                     if (elem.textContent === cityName) {
                         isCityExist = true;
+                        chosenCityBlock.removeChild(elem.parentNode);
                     }
                 })
 
